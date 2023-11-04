@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.Extensions.FileProviders;
 
 namespace WebApp
 {
@@ -27,6 +28,15 @@ namespace WebApp
 
             app.UseBlazorFrameworkFiles();
             app.UseStaticFiles();
+
+            //自分で物理フォルダとURLを指定。
+            var contentRootPath = app.Environment.ContentRootPath;  //プロジェクトのルート
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                ServeUnknownFileTypes = true,
+                FileProvider = new PhysicalFileProvider(Path.Combine(contentRootPath, "Pages/AI/wwwroot")),
+                RequestPath = "/AI",
+            });
 
             app.UseRouting();
 
